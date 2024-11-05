@@ -1,10 +1,10 @@
-import 'package:blog_app/common/bloc/generic_data_cubit.dart';
+import 'package:blog_app/common/bloc/generic_bloc/generic_data_cubit.dart';
 import 'package:blog_app/domain/post/usecase/get_post_usecase.dart';
 import 'package:blog_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/generic_data_state.dart';
+import '../../../common/bloc/generic_bloc/generic_data_state.dart';
 import '../../../common/widgets/post/post_card.dart';
 
 class GridViewPostCard extends StatelessWidget {

@@ -1,4 +1,5 @@
-import 'package:blog_app/common/bloc/generic_data_cubit.dart';
+import 'package:blog_app/common/bloc/button/button_cubit.dart';
+import 'package:blog_app/common/bloc/button/button_state.dart';
 import 'package:blog_app/common/validators/validators.dart';
 import 'package:blog_app/common/widgets/app_bar/app_bar.dart';
 import 'package:blog_app/common/widgets/button/reactive_elevated_button.dart';
@@ -7,15 +8,16 @@ import 'package:blog_app/core/configs/routes/routes_name.dart';
 import 'package:blog_app/core/configs/theme/colors.dart';
 import 'package:blog_app/data/auth/model/signup_req_params.dart';
 import 'package:blog_app/domain/auth/usecases/signup_usecase.dart';
+import 'package:blog_app/presentation/auth/login/bloc/pass_visibility_cubit.dart';
 import 'package:blog_app/service_locator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../common/bloc/generic_data_state.dart';
 import '../../../../common/res/size_configs.dart';
 import '../../../../core/configs/assets/app_vectors.dart';
+import '../../../../core/constants/app_string.dart';
+import '../../login/bloc/pass_visibility_state.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
@@ -28,14 +30,22 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GenericDataCubit(),
-      child: BlocListener<GenericDataCubit, GenericDataState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ButtonCubit(),
+        ),
+        BlocProvider(
+          create: (context) => PassVisibilityCubit(),
+        ),
+      ],
+      child: BlocListener<ButtonCubit, ButtonState>(
         listener: (context, state) {
-          if (state is DataLoaded) {
-            Navigator.pushReplacementNamed(context, AppRoutesName.loginScreen);
+          if (state is ButtonLoaded) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutesName.loginScreen, (route) => false);
           }
-          if (state is FailureLoadData) {
+          if (state is FailureButtonLoad) {
             var snackBar = SnackBar(content: Text(state.errorMessage));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
@@ -65,7 +75,8 @@ class SignupScreen extends StatelessWidget {
                     ),
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 5.5 * AppSizeConfigs.widthMultiplier),
                         child: Form(
                           key: formKey,
                           child: Column(
@@ -73,75 +84,75 @@ class SignupScreen extends StatelessWidget {
                             children: [
                               /// SignupHeader header
                               _signupHeader(context),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// UserName header
                               _userHeader(context),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 0.5 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// UserName Field
                               _userField(),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2.1 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Email header
                               _emailHeader(context),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 0.5 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Email Field
                               _emailField(),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2.1 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Password header
                               _passwordHeader(context),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 0.5 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Password Field
                               _passwordField(),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2.1 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Confirm Password header
                               _confirmPassHeader(context),
-                              const SizedBox(
-                                height: 10,
+                              SizedBox(
+                                height: 0.5 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Confirm Password Field
                               _confirmPassField(),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2.1 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Remember me and Forgot Password
                               _rememberAndForgotPass(context),
-                              const SizedBox(
-                                height: 20,
+                              SizedBox(
+                                height: 2.1 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Login Button
                               _signupButton(),
-                              const SizedBox(
-                                height: 40,
+                              SizedBox(
+                                height: 4.3 * AppSizeConfigs.heightMultiplier,
                               ),
-                          
+
                               /// Dont't have an account and signup
                               _textSpan(context),
-                          
-                              const SizedBox(
-                                height: 40,
+
+                              SizedBox(
+                                height: 4.3 * AppSizeConfigs.heightMultiplier,
                               ),
                             ],
                           ),
@@ -176,7 +187,7 @@ class SignupScreen extends StatelessWidget {
   Widget _signupHeader(BuildContext context) {
     return Center(
       child: Text(
-        "Sign Up",
+        AppString.signUp,
         style: Theme.of(context)
             .textTheme
             .headlineMedium!
@@ -187,7 +198,7 @@ class SignupScreen extends StatelessWidget {
 
   Widget _userHeader(BuildContext context) {
     return Text(
-      "UserName",
+      AppString.userName,
       style: Theme.of(context)
           .textTheme
           .bodyLarge!
@@ -198,16 +209,16 @@ class SignupScreen extends StatelessWidget {
   Widget _userField() {
     return CustomTextField(
       controller: _userNameCon,
-      hintText: "Enter UserName",
+      hintText: AppString.enterUserName,
       prefixIcon: Icons.mail,
-      suffixIcon: Icons.verified_user,
+      secondaryIcon: Icons.verified_user,
       validator: AppValidators.validateUsername,
     );
   }
 
   Widget _emailHeader(BuildContext context) {
     return Text(
-      "Email",
+      AppString.email,
       style: Theme.of(context)
           .textTheme
           .bodyLarge!
@@ -218,36 +229,44 @@ class SignupScreen extends StatelessWidget {
   Widget _emailField() {
     return CustomTextField(
       controller: _emailCon,
-      hintText: "Enter E-mail",
+      hintText: AppString.enterEmail,
       prefixIcon: Icons.mail,
-      suffixIcon: Icons.verified_user,
+      secondaryIcon: Icons.verified_user,
       validator: AppValidators.validateEmail,
     );
   }
 
   Widget _passwordHeader(BuildContext context) {
     return Text(
-      "Password",
-      style: Theme.of(context)
-          .textTheme
-          .bodyLarge!
-          .copyWith(color: AppColor.primaryColor,),
+      AppString.password,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: AppColor.primaryColor,
+          ),
     );
   }
 
   Widget _passwordField() {
-    return CustomTextField(
-      controller: _passCon,
-      hintText: "Enter Password",
-      prefixIcon: Icons.lock,
-      suffixIcon: Icons.remove_red_eye,
-      validator: AppValidators.validatePassword,
+    return BlocBuilder<PassVisibilityCubit, PassVisibilityState>(
+      builder: (context, state) {
+        return CustomTextField(
+          controller: _passCon,
+          hintText: AppString.enterPassword,
+          prefixIcon: Icons.lock,
+          primaryIcon: Icons.remove_red_eye,
+          secondaryIcon: Icons.visibility_off,
+          obscureText: state.obscuredTextChange,
+          onPressed: () => context
+              .read<PassVisibilityCubit>()
+              .onClicked(state.obscuredTextChange),
+          validator: AppValidators.validatePassword,
+        );
+      },
     );
   }
 
   Widget _confirmPassHeader(BuildContext context) {
     return Text(
-      "Confirm Password",
+      AppString.password,
       style: Theme.of(context)
           .textTheme
           .bodyLarge!
@@ -256,11 +275,21 @@ class SignupScreen extends StatelessWidget {
   }
 
   Widget _confirmPassField() {
-    return CustomTextField(
-      hintText: "Confirm Password",
-      prefixIcon: Icons.lock,
-      suffixIcon: Icons.remove_red_eye,
-      validator: (value)=> AppValidators.validateConfirmPassword(value, _passCon.text),
+    return BlocBuilder<PassVisibilityCubit, PassVisibilityState>(
+      builder: (context, state) {
+        return CustomTextField(
+          hintText: AppString.confirmPassword,
+          prefixIcon: Icons.lock,
+          primaryIcon: Icons.remove_red_eye,
+          secondaryIcon: Icons.visibility_off,
+          obscureText: state.obscuredTextChange,
+          onPressed: () => context
+              .read<PassVisibilityCubit>()
+              .onClicked(state.obscuredTextChange),
+          validator: (value) =>
+              AppValidators.validateConfirmPassword(value, _passCon.text),
+        );
+      },
     );
   }
 
@@ -269,7 +298,7 @@ class SignupScreen extends StatelessWidget {
       children: [
         Checkbox(value: false, onChanged: (value) {}),
         Text(
-          "Remember me",
+          AppString.rememberMe,
           style: Theme.of(context)
               .textTheme
               .bodySmall!
@@ -285,18 +314,18 @@ class SignupScreen extends StatelessWidget {
         width: double.infinity,
         child: ReactiveElevatedButton(
           onPressed: () {
-            if(formKey.currentState!.validate()){
-               context.read<GenericDataCubit>().getData(
-                  sl<SignupUsecase>(),
-                  params: SignupReqParams(
-                    name: _userNameCon.text,
-                    email: _emailCon.text,
-                    password: _passCon.text,
-                  ),
-                );
+            if (formKey.currentState!.validate()) {
+              context.read<ButtonCubit>().execute(
+                    usecase: sl<SignupUsecase>(),
+                    params: SignupReqParams(
+                      name: _userNameCon.text,
+                      email: _emailCon.text,
+                      password: _passCon.text,
+                    ),
+                  );
             }
           },
-          label: "Sign Up",
+          label: AppString.signUp,
         ),
       );
     });
@@ -308,23 +337,24 @@ class SignupScreen extends StatelessWidget {
         TextSpan(
           children: [
             TextSpan(
-              text: "Already Have an account ",
+              text: AppString.alreadyHaveAnAccount,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
                   .copyWith(color: AppColor.primaryColor),
             ),
             TextSpan(
-                text: "Login",
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.pushReplacementNamed(
-                        context, AppRoutesName.loginScreen);
-                  }),
+              text: AppString.login,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: AppColor.primaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, AppRoutesName.loginScreen, (route) => false);
+                },
+            ),
           ],
         ),
       ),

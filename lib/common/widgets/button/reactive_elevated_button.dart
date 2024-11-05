@@ -1,9 +1,8 @@
-import 'package:blog_app/common/bloc/generic_data_cubit.dart';
+import 'package:blog_app/common/bloc/button/button_cubit.dart';
+import 'package:blog_app/common/bloc/button/button_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../core/configs/theme/colors.dart';
-import '../../bloc/generic_data_state.dart';
 
 class ReactiveElevatedButton extends StatelessWidget {
   const ReactiveElevatedButton({
@@ -14,7 +13,7 @@ class ReactiveElevatedButton extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
     this.foregroundColor,
-    this.borderColor = AppColor.primaryColor,
+    this.borderColor = AppColor.primaryColor, this.height, this.width,
   });
 
   final String label;
@@ -24,28 +23,33 @@ class ReactiveElevatedButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? foregroundColor;
   final Color borderColor;
+  final double ? height;
+  final double ? width;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GenericDataCubit, GenericDataState>(
+    return BlocBuilder<ButtonCubit, ButtonState>(
       builder: (context, state) {
-        if (state is DataLoading) {
-          _loading(context);
+        if (state is ButtonLoading) {
+         return _loading(context);
         }
-        return _loaded(context);
+         return  _loaded(context);
+        
       },
     );
   }
 
   Widget _loading(BuildContext context) {
     return ElevatedButton(
-        onPressed: null,
-        style: ElevatedButton.styleFrom(
-          disabledBackgroundColor: Colors.grey,
-        ),
-        child: const CircularProgressIndicator(
-          color: Colors.white,
-        ));
+      onPressed: null,
+      style: ElevatedButton.styleFrom(
+        disabledBackgroundColor: AppColor.primaryColor1,
+        side:const BorderSide(color: AppColor.primaryColor1)
+      ),
+      child: const CircularProgressIndicator(
+        color: Colors.white,
+      ),
+    );
   }
 
   Widget _loaded(BuildContext context) {

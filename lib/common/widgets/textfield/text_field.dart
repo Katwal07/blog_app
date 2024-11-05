@@ -13,6 +13,9 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.onChanged,
+    this.onPressed,
+    this.primaryIcon,
+    this.secondaryIcon,
   });
 
   final String hintText;
@@ -23,6 +26,9 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final String Function(String)? onChanged;
+  final void Function()? onPressed;
+  final IconData? primaryIcon;
+  final IconData? secondaryIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,12 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-        suffixIcon: suffixIcon != null ? Icon(suffixIcon) : null,
+        suffixIcon: IconButton(
+          onPressed: onPressed,
+          icon: Icon(
+            obscureText ? primaryIcon : secondaryIcon,
+          ),
+        ),
         contentPadding: EdgeInsets.symmetric(
           vertical: 1.5 * AppSizeConfigs.heightMultiplier,
           horizontal: 20,

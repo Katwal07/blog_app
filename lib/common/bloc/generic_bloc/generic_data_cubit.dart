@@ -1,4 +1,4 @@
-import 'package:blog_app/common/bloc/generic_data_state.dart';
+import 'package:blog_app/common/bloc/generic_bloc/generic_data_state.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

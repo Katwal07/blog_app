@@ -1,10 +1,10 @@
-import 'package:blog_app/common/bloc/generic_data_cubit.dart';
+import 'package:blog_app/common/bloc/generic_bloc/generic_data_cubit.dart';
 import 'package:blog_app/domain/category/usecase/get_category_usecase.dart';
 import 'package:blog_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/bloc/generic_data_state.dart';
+import '../../../common/bloc/generic_bloc/generic_data_state.dart';
 import '../../../core/configs/theme/colors.dart';
 
 class CategoryList extends StatelessWidget {

@@ -11,4 +11,5 @@ class AppColor {
 
   static const Color secondaryColor1 = Color(0XFF777777);
   static const Color secondaryColor2 = Color(0XFFEFEFEF);
+  static const Color primaryColor1 = Color.fromARGB(255, 201, 111, 79);
 }

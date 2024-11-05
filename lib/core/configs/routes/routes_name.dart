@@ -8,12 +8,8 @@ class AppRoutesName {
   static const String loadingScreen = 'loading_screen';
   static const String navigationBar = 'navigation_bar';
   static const String homeScreen = 'home_screen';
-    static const String categoryScreen = 'category_screen';
-      static const String addPostScreen = 'add_post_screen';
-        static const String tagsScreen = 'tag_screen';
-          static const String profileScreen = 'profile_screen';
-
-
-
-
+  static const String categoryScreen = 'category_screen';
+  static const String addPostScreen = 'add_post_screen';
+  static const String tagsScreen = 'tag_screen';
+  static const String profileScreen = 'profile_screen';
 }

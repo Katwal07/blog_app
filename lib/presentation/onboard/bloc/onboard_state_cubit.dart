@@ -16,7 +16,8 @@ class OnBoardStateCubit extends Cubit<OnBoardState>{
     final prefs = await SharedPreferences.getInstance();
     final hasSeenOnBoarding = prefs.getBool(_prefKey) ?? false;
 
-    if(hasSeenOnBoarding){
+    if(hasSeenOnBoarding) {
+      await Future.delayed(const Duration(seconds: 3));
       emit(OnBoardingComplete());
     }else{
       emit(OnBoardingNotComplete());

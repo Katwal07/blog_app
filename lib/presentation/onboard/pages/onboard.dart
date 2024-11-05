@@ -21,60 +21,46 @@ class OnBoardingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocProvider(
-        create: (context) => OnBoardStateCubit()..checkOnBoardStatus(),
-        child: BlocListener<OnBoardStateCubit, OnBoardState>(
-          listener: (context, state) {
-            if (state is OnBoardingComplete) {
-              Navigator.pushReplacementNamed(context, AppRoutesName.authScreen);
-            }
-          },
-          child: BlocBuilder<OnBoardStateCubit, OnBoardState>(
-            builder: (context, state) {
-              if (state is OnBoardingNotComplete) {
-                return SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 5.8 * AppSizeConfigs.widthMultiplier),
-                    child: Stack(
-                      fit: StackFit.expand,
+          create: (context) => OnBoardStateCubit(),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      5.8 * AppSizeConfigs.widthMultiplier), // horizontal : 25
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  /// ONBOARDING PAGEVIEW
+                  FractionallySizedBox(
+                      alignment: Alignment.topCenter,
+                      heightFactor: 0.8,
+                      child: OnboardPageview(
+                        pageController: onBoardPagecontroller.pageController,
+                      )),
+
+                  /// ONBOARDING PAGES CONTROLLER BUTTONS
+                  FractionallySizedBox(
+                    alignment: Alignment.bottomCenter,
+                    heightFactor: 0.2,
+                    child: Column(
                       children: [
-                        /// ONBOARDING PAGEVIEW
-                        FractionallySizedBox(
-                          alignment: Alignment.topCenter,
-                          heightFactor: 0.8,
-                          child: OnboardPageview(
-                            pageController: onBoardPagecontroller.pageController,
-                          ),
+                        /// Get Started Button
+                        _getStartedButton(context),
+
+                        SizedBox(
+                          //height: 50,
+                          height: 5.3 * AppSizeConfigs.heightMultiplier,
                         ),
 
-                        /// ONBOARDING PAGES CONTROLLER BUTTONS
-                        FractionallySizedBox(
-                          alignment: Alignment.bottomCenter,
-                          heightFactor: 0.2,
-                          child: Column(
-                            children: [
-                              /// Get Started Button
-                              _getStartedButton(context),
-
-                              SizedBox(
-                                height: 5.3 * AppSizeConfigs.heightMultiplier,
-                              ),
-
-                              /// OnBoard Skip and Next Button
-                              _onBoardFooter(context),
-                            ],
-                          ),
-                        ),
+                        /// OnBoard Skip and Next Button
+                        _onBoardFooter(context),
                       ],
                     ),
                   ),
-                );
-              }
-              return Container();
-            },
-          ),
-        ),
-      ),
+                ],
+              ),
+            ),
+          )),
     );
   }
 
@@ -98,7 +84,8 @@ class OnBoardingScreen extends StatelessWidget {
                 children: List.generate(3, (index) {
                   return Container(
                     margin: EdgeInsets.symmetric(
-                        horizontal: 0.9 * AppSizeConfigs.widthMultiplier),
+                        horizontal: 0.9 *
+                            AppSizeConfigs.widthMultiplier), // horizontal : 4
                     width: 2.3 * AppSizeConfigs.widthMultiplier,
                     height: 1.07 * AppSizeConfigs.heightMultiplier,
                     decoration: BoxDecoration(
@@ -134,6 +121,7 @@ class OnBoardingScreen extends StatelessWidget {
         label: 'Get Started',
         onPressed: () {
           context.read<OnBoardStateCubit>().completeOnBoarding();
+          Navigator.pushReplacementNamed(context, AppRoutesName.authScreen);
         },
       ),
     );
