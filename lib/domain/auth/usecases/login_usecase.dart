@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 
 class LoginUsecase extends UseCase<Either,SigninReqParams>{
   @override
-  Future<Either> call({SigninReqParams ? params}) async{
+  Future<Either> call({SigninReqParams ? params,  }) async{
     return await sl<AuthRepository>().login(params!);
   }
 }

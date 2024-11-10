@@ -26,6 +26,8 @@ class ChooseAuth extends StatelessWidget {
                 Colors.white,
                 BlendMode.srcIn,
               ),
+              width: 93 * AppSizeConfigs.widthMultiplier,
+              height: 4.5 * AppSizeConfigs.heightMultiplier,
             ),
           ),
           const Spacer(),
@@ -44,8 +46,7 @@ class ChooseAuth extends StatelessWidget {
             width: double.infinity,
             child: CustomElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutesName.loginScreen);
+                Navigator.pushNamed(context, AppRoutesName.loginScreen);
               },
               label: AppString.login,
             ),
@@ -57,8 +58,7 @@ class ChooseAuth extends StatelessWidget {
             width: double.infinity,
             child: CustomElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, AppRoutesName.signupScreen);
+                Navigator.pushNamed(context, AppRoutesName.signupScreen);
               },
               backgroundColor: Colors.transparent,
               borderColor: Colors.white,

@@ -1,3 +1,5 @@
+import 'package:blog_app/common/res/size_configs.dart';
+import 'package:blog_app/core/configs/theme/colors.dart';
 import 'package:blog_app/presentation/post/pages/add_post.dart';
 import 'package:blog_app/presentation/profile/pages/profile.dart';
 import 'package:blog_app/presentation/tags/pages/tags.dart';
@@ -52,17 +54,26 @@ class NavigationPage extends StatelessWidget {
           builder: (context, state) {
         if (state is NavigationPageState) {
           return Scaffold(
-            body: bottomNavScreen.elementAt(state.tabIndex),
+            body:
+            IndexedStack(
+              index: state.tabIndex,
+              children: bottomNavScreen,
+            ),
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(
                 canvasColor:
-                    const Color(0xff242A32), // Your desired background color
+                    Colors.white,
               ),
               child: BottomNavigationBar(
+                type: BottomNavigationBarType.shifting,
+                backgroundColor: Colors.white,
                 items: bottomNavigationBarItems,
                 currentIndex: state.tabIndex,
-                selectedItemColor: const Color(0xff0296E5),
+                selectedItemColor:  AppColor.primaryColor,
                 unselectedItemColor: const Color(0xff67686D),
+                iconSize: 6 * AppSizeConfigs.imageSizeMultiplier,
+                selectedFontSize: 14,
+                unselectedFontSize: 12,
                 onTap: (index) {
                   context.read<NavigationCubit>().navigateToPage(index);
                 },

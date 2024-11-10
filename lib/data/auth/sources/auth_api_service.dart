@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:blog_app/core/constants/app_api_strings.dart';
 import 'package:blog_app/core/network/dio_client.dart';
 import 'package:blog_app/service_locator.dart';
@@ -21,8 +22,10 @@ class AuthApiServiceImpl extends AuthApiService {
         data: params.toMap(),
       );
       return Right(response.data);
+    } on SocketException catch (e) {
+      return Left(e);
     } on DioException catch (e) {
-      return Left(e.response!.data['message']);
+      return Left(e);
     }
   }
 
@@ -34,8 +37,10 @@ class AuthApiServiceImpl extends AuthApiService {
         data: params.toMap(),
       );
       return Right(response.data);
-    } on DioException catch (e) {
-      return Left(e.response!.data['message']);
+    } on SocketException catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(e);
     }
   }
 }

@@ -10,6 +10,8 @@ import 'package:blog_app/core/configs/theme/colors.dart';
 import 'package:blog_app/core/constants/app_string.dart';
 import 'package:blog_app/data/auth/model/signin_req_params.dart';
 import 'package:blog_app/domain/auth/usecases/login_usecase.dart';
+import 'package:blog_app/presentation/auth/login/bloc/checkbox/checkbox_cubit.dart';
+import 'package:blog_app/presentation/auth/login/bloc/checkbox/checkbox_state.dart';
 import 'package:blog_app/presentation/auth/login/bloc/pass_visibility_cubit.dart';
 import 'package:blog_app/service_locator.dart';
 import 'package:flutter/gestures.dart';
@@ -37,12 +39,15 @@ class LoginScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => PassVisibilityCubit(),
         ),
+        BlocProvider(
+          create: (context) => CheckBoxCubit(),
+        ),
       ],
       child: BlocListener<ButtonCubit, ButtonState>(
         listener: (context, state) {
           if (state is ButtonLoaded) {
             Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutesName.homeScreen, (route) => false);
+                context, AppRoutesName.navigationBar, (route) => false);
           }
           if (state is FailureButtonLoad) {
             var snackBar = SnackBar(content: Text(state.errorMessage));
@@ -51,16 +56,19 @@ class LoginScreen extends StatelessWidget {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
+
+          /// AppBar
           appBar: _appBar(),
           body: SafeArea(
             child: Stack(
               fit: StackFit.expand,
               children: [
-                ClipPath(
-                  clipper: CustomCurvedEdge(),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.topCenter,
-                    heightFactor: 0.1,
+                /// Curved Edge of LoginScreen
+                FractionallySizedBox(
+                  alignment: Alignment.topCenter,
+                  heightFactor: 0.1,
+                  child: ClipPath(
+                    clipper: CustomCurvedEdge(),
                     child: Container(
                       color: AppColor.primaryColor,
                     ),
@@ -219,7 +227,9 @@ class LoginScreen extends StatelessWidget {
           primaryIcon: Icons.remove_red_eye,
           secondaryIcon: Icons.visibility_off,
           obscureText: state.obscuredTextChange,
-          onPressed: () => context.read<PassVisibilityCubit>().onClicked(state.obscuredTextChange),
+          onPressed: () => context
+              .read<PassVisibilityCubit>()
+              .onClicked(state.obscuredTextChange),
           validator: AppValidators.validatePassword,
         );
       },
@@ -229,7 +239,25 @@ class LoginScreen extends StatelessWidget {
   Widget _rememberAndForgotPass(BuildContext context) {
     return Row(
       children: [
-        Checkbox(value: false, onChanged: (value) {}),
+        BlocBuilder<CheckBoxCubit, CheckBoxState>(
+          builder: (context, state) {
+            if (state is CheckBoxInitial) {
+              return Checkbox(
+                  value: state.value,
+                  onChanged: (value) {
+                    context.read<CheckBoxCubit>().checkBox(state.value);
+                  });
+            }
+            if (state is CheckBoxClicked) {
+              return Checkbox(
+                  value: state.value,
+                  onChanged: (value) {
+                    context.read<CheckBoxCubit>().checkBox(state.value);
+                  });
+            }
+            return Checkbox.adaptive(value: false, onChanged: (value) {});
+          },
+        ),
         Text(
           AppString.rememberMe,
           style: Theme.of(context)

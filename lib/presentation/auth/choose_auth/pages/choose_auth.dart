@@ -10,13 +10,15 @@ class ChooseAuthScreen extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(AppImages.authBackground),
+          fit: BoxFit.cover,
+          image: AssetImage(
+            AppImages.authBackground,
+          ),
         ),
       ),
       child: const Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-        child: ChooseAuth()),
+        body: SafeArea(child: ChooseAuth()),
       ),
     );
   }

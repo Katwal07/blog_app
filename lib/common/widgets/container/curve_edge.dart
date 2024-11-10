@@ -12,7 +12,7 @@ class CustomCurvedEdge extends CustomClipper<Path>{
     final firstEndingCurve = Offset(30, h-20);
     path.quadraticBezierTo(firstStartingCurve.dx, firstStartingCurve.dy, firstEndingCurve.dx, firstEndingCurve.dy);
 
-    final secondStartingCurve = Offset(0, h-20);
+    final secondStartingCurve = Offset(30, h-20);
     final secondEndingCurve = Offset(w-30, h-20);
     path.quadraticBezierTo(secondStartingCurve.dx, secondStartingCurve.dy, secondEndingCurve.dx, secondEndingCurve.dy);
 
@@ -26,7 +26,7 @@ class CustomCurvedEdge extends CustomClipper<Path>{
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return true;
+    return false;
   }
 
 }

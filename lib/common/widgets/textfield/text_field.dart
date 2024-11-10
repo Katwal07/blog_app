@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.onPressed,
     this.primaryIcon,
-    this.secondaryIcon,
+    this.secondaryIcon, this.maxLines = 1, 
   });
 
   final String hintText;
@@ -29,6 +29,7 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onPressed;
   final IconData? primaryIcon;
   final IconData? secondaryIcon;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       onChanged: onChanged,
+      maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,

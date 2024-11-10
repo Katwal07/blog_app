@@ -4,6 +4,7 @@ import 'package:blog_app/data/auth/sources/auth_api_service.dart';
 import 'package:blog_app/domain/auth/repositories/auth.dart';
 import 'package:blog_app/service_locator.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
@@ -13,7 +14,9 @@ class AuthRepositoryImpl extends AuthRepository {
       (error) {
         return Left(error);
       },
-      (data) {
+      (data) async{
+        final SharedPreferences getPrefs =await SharedPreferences.getInstance();
+        getPrefs.setString('token', data['access_token']);
         return Right(data);
       },
     );
@@ -30,5 +33,20 @@ class AuthRepositoryImpl extends AuthRepository {
         return Right(data);
       },
     );
+  }
+  
+  @override
+  Future<bool> isLogin() async{
+    try {
+      final SharedPreferences getPrefs = await SharedPreferences.getInstance();
+      var token = getPrefs.getString('token');
+      if(token != null){
+        return true;
+      }else{
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
   }
 }

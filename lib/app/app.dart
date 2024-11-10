@@ -1,7 +1,6 @@
 import 'package:blog_app/common/res/size_configs.dart';
 import 'package:blog_app/core/configs/routes/routes_name.dart';
 import 'package:flutter/material.dart';
-
 import '../core/configs/routes/routes.dart';
 import '../core/configs/theme/theme.dart';
 

@@ -34,7 +34,7 @@ class HorizontalPageView extends StatelessWidget {
 
         SizedBox(
           /// height 70
-          height: 7.5 * AppSizeConfigs.heightMultiplier,
+          height: 5.5 * AppSizeConfigs.heightMultiplier,
         ),
 
         /// OnBoard Picture Discription

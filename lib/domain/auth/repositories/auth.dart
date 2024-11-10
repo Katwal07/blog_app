@@ -5,4 +5,5 @@ import 'package:dartz/dartz.dart';
 abstract class AuthRepository{
   Future<Either> register(SignupReqParams params);
   Future<Either> login(SigninReqParams params);
+  Future<bool> isLogin();
 }

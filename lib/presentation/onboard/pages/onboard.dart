@@ -5,6 +5,7 @@ import 'package:blog_app/core/configs/theme/colors.dart';
 import 'package:blog_app/presentation/onboard/bloc/onboard_state_cubit.dart';
 import 'package:blog_app/presentation/onboard/widgets/onboard_pageview/onboard_pagecontroller.dart';
 import 'package:blog_app/presentation/onboard/widgets/onboard_pageview/onboard_pageview.dart';
+import 'package:blog_app/presentation/splash/bloc/splash_state_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,47 +21,58 @@ class OnBoardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocProvider(
-          create: (context) => OnBoardStateCubit(),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal:
-                      5.8 * AppSizeConfigs.widthMultiplier), // horizontal : 25
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  /// ONBOARDING PAGEVIEW
-                  FractionallySizedBox(
-                      alignment: Alignment.topCenter,
-                      heightFactor: 0.8,
-                      child: OnboardPageview(
-                        pageController: onBoardPagecontroller.pageController,
-                      )),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => OnBoardStateCubit(),
+          ),
+          BlocProvider.value(value: SplashStateCubit())
+        ],
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 5.8 * AppSizeConfigs.widthMultiplier,),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                /// ONBOARDING PAGEVIEW
+                FractionallySizedBox(
+                    alignment: Alignment.topCenter,
+                    heightFactor: 0.7,
+                    child: OnboardPageview(
+                      pageController: onBoardPagecontroller.pageController,
+                    ),),
 
-                  /// ONBOARDING PAGES CONTROLLER BUTTONS
-                  FractionallySizedBox(
-                    alignment: Alignment.bottomCenter,
-                    heightFactor: 0.2,
-                    child: Column(
-                      children: [
-                        /// Get Started Button
-                        _getStartedButton(context),
-
+                /// ONBOARDING PAGES CONTROLLER BUTTONS
+                FractionallySizedBox(
+                  alignment: Alignment.bottomCenter,
+                  heightFactor: 0.3,
+                  child: Column(
+                    children: [
                         SizedBox(
-                          //height: 50,
-                          height: 5.3 * AppSizeConfigs.heightMultiplier,
-                        ),
+                        //height: 50,
+                        height: 5.3 * AppSizeConfigs.heightMultiplier,
+                      ),
 
-                        /// OnBoard Skip and Next Button
-                        _onBoardFooter(context),
-                      ],
-                    ),
+                      /// Get Started Button
+                      _getStartedButton(context),
+
+                      SizedBox(
+                        //height: 50,
+                        height: 5.3 * AppSizeConfigs.heightMultiplier,
+                      ),
+
+                      /// OnBoard Skip and Next Button
+                      _onBoardFooter(context),
+
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 
@@ -115,15 +127,17 @@ class OnBoardingScreen extends StatelessWidget {
   }
 
   Widget _getStartedButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: CustomElevatedButton(
-        label: 'Get Started',
-        onPressed: () {
-          context.read<OnBoardStateCubit>().completeOnBoarding();
-          Navigator.pushReplacementNamed(context, AppRoutesName.authScreen);
-        },
-      ),
-    );
+    return Builder(builder: (context) {
+      return SizedBox(
+        width: double.infinity,
+        child: CustomElevatedButton(
+          label: 'Get Started',
+          onPressed: () {
+            context.read<SplashStateCubit>().completeOnBoarding();
+            Navigator.pushReplacementNamed(context, AppRoutesName.authScreen);
+          },
+        ),
+      );
+    });
   }
 }
