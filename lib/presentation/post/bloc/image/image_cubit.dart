@@ -1,4 +1,6 @@
+
 import 'package:blog_app/presentation/post/bloc/image/image_state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -6,15 +8,17 @@ class ImageCubit extends Cubit<ImageState> {
   ImageCubit() : super(ImageInitialState());
 
   final ImagePicker _imagePicker = ImagePicker();
-  XFile? _selectedImage;
+  XFile? selectedImage;
 
   Future<void> pickImage() async {
+    emit(ImageLoadingState());
+
     try {
-      final pickedImage =
+      final XFile? pickedImage =
           await _imagePicker.pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
-        _selectedImage = pickedImage;
-        emit(ImageLoadedState(imagePath: pickedImage));
+        selectedImage = pickedImage;
+        emit(ImageLoadedState(imagePath: selectedImage!.path));
       } else {
         emit(FailureImageLoaded(errorMessage: "No Image Selected"));
       }
@@ -24,9 +28,12 @@ class ImageCubit extends Cubit<ImageState> {
   }
 
   void reset() {
-    _selectedImage = null;
+    selectedImage = null;
     emit(ImageInitialState());
   }
 
-  String? getSelectedImagePath() => _selectedImage?.path;
+  String? getSelectedImagePath(){
+     debugPrint("Selected image path: ${selectedImage?.path}"); 
+    return selectedImage?.path;
+  }
 }

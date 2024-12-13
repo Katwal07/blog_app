@@ -1,4 +1,3 @@
-import 'package:image_picker/image_picker.dart';
 
 abstract class ImageState {}
 
@@ -7,7 +6,7 @@ class ImageInitialState extends ImageState{}
 class ImageLoadingState extends ImageState{}
 
 class ImageLoadedState extends ImageState{
-  final XFile imagePath;
+  final String imagePath;
 
   ImageLoadedState({required this.imagePath});
 }

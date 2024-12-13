@@ -7,7 +7,7 @@ class AddPostModel {
   final String tags;
   final String body;
   final String status;
-  final File featuredimage;
+  final File? featuredimage;
   final int userId;
 
   AddPostModel({
